@@ -9,34 +9,41 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(".")); // Servir arquivos estáticos
+app.use(express.static(__dirname)); // Servir arquivos estáticos da raiz
 
 // Teste de conexão com email ao iniciar o servidor
-console.log("🧪 Testando conexão com Gmail...");
-const testTransporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
+console.log("🧪 Iniciando servidor OdontoPlus...");
+console.log("📧 Email configurado:", process.env.EMAIL_USER ? "Sim" : "Não");
+
+// Rota raiz - servir o index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-testTransporter.verify(function (error, success) {
-  if (error) {
-    console.log("❌ FALHA NA CONEXÃO COM GMAIL:");
-    console.log("Erro:", error.message);
-    console.log("Código:", error.code);
-    console.log("Detalhes completos:", error);
-  } else {
-    console.log("✅ Conexão com Gmail estabelecida com sucesso!");
-  }
+// Rotas para outras páginas HTML
+app.get("/sobre", (req, res) => {
+  res.sendFile(path.join(__dirname, "sobre.html"));
 });
+
+app.get("/servicos", (req, res) => {
+  res.sendFile(path.join(__dirname, "servicos.html"));
+});
+
+app.get("/equipe", (req, res) => {
+  res.sendFile(path.join(__dirname, "equipe.html"));
+});
+
+app.get("/blog", (req, res) => {
+  res.sendFile(path.join(__dirname, "blog.html"));
+});
+
+app.get("/contato", (req, res) => {
+  res.sendFile(path.join(__dirname, "contato.html"));
+});
+
+// Servir arquivos CSS e JS estáticos
+app.use("/css", express.static(path.join(__dirname, "css")));
+app.use("/js", express.static(path.join(__dirname, "js")));
 
 // Rota para processar formulário de contato
 app.post("/api/contato", async (req, res) => {
@@ -55,7 +62,6 @@ app.post("/api/contato", async (req, res) => {
     }
 
     console.log("✅ Dados válidos recebidos");
-    console.log("📧 Preparando para enviar email...");
 
     // Configuração do transporter
     const transporter = nodemailer.createTransport({
@@ -138,7 +144,6 @@ app.post("/api/contato", async (req, res) => {
     console.error("❌ ERRO DETALHADO:");
     console.error("Mensagem:", error.message);
     console.error("Código:", error.code);
-    console.error("Stack:", error.stack);
 
     res.status(500).json({
       success: false,
@@ -151,7 +156,6 @@ app.post("/api/contato", async (req, res) => {
 app.post("/api/whatsapp", (req, res) => {
   const { nome, telefone, preferencia } = req.body;
 
-  // Aqui você pode salvar no banco de dados ou enviar email
   const mensagemWhatsApp = `Olá! Gostaria de agendar uma consulta.\nNome: ${nome}\nTelefone: ${telefone}\nPreferência: ${preferencia}`;
 
   res.json({
@@ -168,12 +172,17 @@ app.get("/api/health", (req, res) => {
     status: "online",
     message: "Servidor OdontoPlus está funcionando",
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
   });
+});
+
+// Rota de fallback para páginas não encontradas
+app.get("*", (req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📧 Email configurado: ${process.env.EMAIL_USER}`);
-  console.log(`🌐 Acesse: http://localhost:${PORT}`);
+  console.log(`🚀 Servidor OdontoPlus rodando na porta ${PORT}`);
+  console.log(`🌐 Ambiente: ${process.env.NODE_ENV || "development"}`);
 });
