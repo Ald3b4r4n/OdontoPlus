@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contato - OdontoPlus Clínica Odontológica</title>
+    <meta
+      name="description"
+      content="Entre em contato com a OdontoPlus. Agende sua consulta, tire dúvidas ou solicite informações sobre nossos tratamentos odontológicos."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container header-container">
+        <div class="logo">
+          <i
+            class="fas fa-tooth"
+            style="font-size: 2rem; color: var(--primary)"
+          ></i>
+          <span class="logo-text">OdontoPlus</span>
+        </div>
+        <div class="nav-toggle" id="navToggle">
+          <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="servicos.html">Serviços</a></li>
+          <li><a href="equipe.html">Equipe</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contato.html" class="active">Contato</a></li>
+          <li><a href="contato.html" class="btn">Agendar Consulta</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <section
+      class="hero"
+      style="
+        padding: 150px 0 80px;
+        background: linear-gradient(
+          rgba(26, 115, 232, 0.9),
+          rgba(26, 115, 232, 0.9)
+        );
+      "
+    >
+      <div class="container">
+        <h1>Entre em Contato</h1>
+        <p>Estamos aqui para esclarecer suas dúvidas e cuidar do seu sorriso</p>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="section">
+      <div class="container">
+        <div class="contact-content">
+          <div class="contact-info">
+            <h3>Informações de Contato</h3>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4>Endereço</h4>
+                <p>
+                  Rua das Flores, 123 - Centro<br />São Paulo - SP, 01234-567
+                </p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div>
+                <h4>Telefone</h4>
+                <p>(11) 3456-7890</p>
+                <p>(11) 99876-5432 (WhatsApp)</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h4>E-mail</h4>
+                <p>contato@odontoplus.com.br</p>
+                <p>agendamento@odontoplus.com.br</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4>Horário de Funcionamento</h4>
+                <p>
+                  Segunda a Sexta: 8h às 19h<br />Sábado: 8h às 13h<br />Domingo:
+                  Fechado
+                </p>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px">
+              <h4>Nos Acompanhe</h4>
+              <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="contact-form">
+            <h3 style="margin-bottom: 20px">Envie uma Mensagem</h3>
+            <form id="formContato">
+              <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="telefone">Telefone *</label>
+                <input type="tel" id="telefone" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label for="assunto">Assunto</label>
+                <select id="assunto" class="form-control">
+                  <option value="">Selecione o assunto</option>
+                  <option value="agendamento">Agendamento de Consulta</option>
+                  <option value="duvida">Dúvida sobre Tratamento</option>
+                  <option value="orcamento">Solicitação de Orçamento</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="mensagem">Mensagem *</label>
+                <textarea
+                  id="mensagem"
+                  class="form-control"
+                  required
+                  placeholder="Descreva sua dúvida, solicitação ou preferência de horário..."
+                ></textarea>
+              </div>
+              <button type="submit" class="btn">Enviar Mensagem</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapa -->
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="section-title">
+          <h2>Nossa Localização</h2>
+          <p>Venha nos visitar em nossa clínica no centro de São Paulo</p>
+        </div>
+        <div
+          style="
+            height: 400px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+          "
+        >
+          <!-- Mapa placeholder - substituir por Google Maps real -->
+          <div
+            style="
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+            "
+          >
+            <div style="text-align: center">
+              <i
+                class="fas fa-map-marker-alt"
+                style="
+                  font-size: 3rem;
+                  color: var(--primary);
+                  margin-bottom: 15px;
+                "
+              ></i>
+              <h3>Mapa da Localização</h3>
+              <p>Rua das Flores, 123 - Centro, São Paulo - SP</p>
+              <a
+                href="https://maps.google.com"
+                target="_blank"
+                class="btn"
+                style="margin-top: 15px"
+                >Abrir no Google Maps</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Rápido -->
+    <section class="section" style="background-color: #f8f9fa">
+      <div class="container">
+        <div class="section-title">
+          <h2>Perguntas Frequentes</h2>
+          <p>Tire suas dúvidas mais comuns sobre nossos serviços</p>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-content">
+              <h3>Como agendar uma consulta?</h3>
+              <p>
+                Você pode agendar pelo telefone, WhatsApp, e-mail ou preenchendo
+                nosso formulário de contato. Respondemos rapidamente!
+              </p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-content">
+              <h3>Qual a forma de pagamento?</h3>
+              <p>
+                Aceitamos cartões de crédito, débito, PIX e parcelamos
+                tratamentos em até 12x sem juros.
+              </p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-content">
+              <h3>Trabalham com convênios?</h3>
+              <p>
+                Sim, atendemos os principais convênios odontológicos. Entre em
+                contato para verificar sua cobertura.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <!-- Mesmo footer do index.html -->
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 OdontoPlus. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a
+      href="https://wa.me/551134567890?text=Olá! Gostaria de agendar uma consulta."
+      class="whatsapp-float"
+      target="_blank"
+    >
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="js/form.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
