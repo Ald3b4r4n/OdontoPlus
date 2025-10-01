@@ -1,13 +1,11 @@
 // form.js - Gerenciamento de formulários com backend real
 
-// URLs da API (ajuste conforme seu ambiente)
-const API_BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://seu-dominio.com";
+// URLs da API (ajuste automático para produção/desenvolvimento)
+const API_BASE_URL = window.location.origin;
 
 // Inicializar formulários quando o DOM estiver carregado
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("🔧 Inicializando formulários...");
   initForms();
   initWhatsAppIntegration();
 });
@@ -17,10 +15,14 @@ function initForms() {
   // Formulário de contato principal
   const formContato = document.getElementById("formContato");
   if (formContato) {
+    console.log("✅ Formulário de contato encontrado");
     formContato.addEventListener("submit", async function (e) {
       e.preventDefault();
-      await handleFormSubmit(this, "contato");
+      console.log("📨 Formulário de contato submetido");
+      await handleFormSubmit(this);
     });
+  } else {
+    console.log("❌ Formulário de contato NÃO encontrado");
   }
 
   // Formulário de newsletter
@@ -43,29 +45,43 @@ function initForms() {
 }
 
 // Processar formulário de contato
-async function handleFormSubmit(form, type) {
+async function handleFormSubmit(form) {
+  console.log("🔄 Processando formulário de contato...");
+
   // Validar formulário
   if (!validateForm(form)) {
     return;
   }
 
   // Coletar dados do formulário
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData);
+  const formData = {
+    nome: document.getElementById("nome").value,
+    email: document.getElementById("email").value,
+    telefone: document.getElementById("telefone").value,
+    assunto: document.getElementById("assunto").value,
+    mensagem: document.getElementById("mensagem").value,
+  };
+
+  console.log("📊 Dados coletados:", formData);
 
   // Mostrar loading
   showLoading(form);
 
   try {
+    console.log("🌐 Enviando para API:", `${API_BASE_URL}/api/contato`);
+
     const response = await fetch(`${API_BASE_URL}/api/contato`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(formData),
     });
 
+    console.log("📡 Resposta da API:", response.status);
+
     const result = await response.json();
+    console.log("📨 Resultado:", result);
 
     if (result.success) {
       showSuccessMessage(result.message);
@@ -82,13 +98,13 @@ async function handleFormSubmit(form, type) {
       showErrorMessage(result.message || "Erro ao enviar mensagem.");
     }
   } catch (error) {
-    console.error("Erro:", error);
+    console.error("❌ Erro na requisição:", error);
     showErrorMessage(
       "Erro de conexão. Tente novamente ou entre em contato por telefone."
     );
 
     // Fallback: enviar por email usando mailto
-    showFallbackOption(data);
+    showFallbackOption(formData);
   } finally {
     hideLoading(form);
   }
@@ -106,10 +122,7 @@ async function handleNewsletterSubmit(form) {
   showLoading(form);
 
   try {
-    // Aqui você pode integrar com Mailchimp, SendGrid, etc.
-    // Por enquanto, vamos apenas simular
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     showSuccessMessage("Inscrito com sucesso! Você receberá nossas novidades.");
     form.reset();
   } catch (error) {
@@ -143,7 +156,6 @@ async function handleAgendamentoSubmit(form) {
     const result = await response.json();
 
     if (result.success) {
-      // Redirecionar para WhatsApp
       window.open(result.whatsappUrl, "_blank");
       showSuccessMessage("Redirecionando para WhatsApp...");
       form.reset();
@@ -152,7 +164,6 @@ async function handleAgendamentoSubmit(form) {
     }
   } catch (error) {
     console.error("Erro:", error);
-    // Fallback: WhatsApp direto
     const mensagem = `Olá! Gostaria de agendar uma consulta.\nNome: ${
       data.nome
     }\nTelefone: ${data.telefone}\nPreferência: ${
@@ -172,6 +183,8 @@ function validateForm(form) {
   let isValid = true;
   const requiredFields = form.querySelectorAll("[required]");
 
+  console.log("🔍 Validando formulário...");
+
   // Resetar estilos de erro
   form.querySelectorAll(".form-control").forEach((field) => {
     field.style.borderColor = "#ddd";
@@ -182,7 +195,7 @@ function validateForm(form) {
     if (!field.value.trim()) {
       isValid = false;
       field.style.borderColor = "#dc3545";
-      field.focus();
+      console.log(`❌ Campo obrigatório vazio: ${field.id}`);
     }
   });
 
@@ -197,6 +210,8 @@ function validateForm(form) {
 
   if (!isValid) {
     showErrorMessage("Por favor, preencha todos os campos obrigatórios.");
+  } else {
+    console.log("✅ Formulário validado com sucesso");
   }
 
   return isValid;
@@ -212,6 +227,7 @@ function validateEmail(email) {
 function showLoading(form) {
   const submitBtn = form.querySelector('button[type="submit"]');
   if (submitBtn) {
+    submitBtn.setAttribute("data-original-text", submitBtn.innerHTML);
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
     submitBtn.disabled = true;
   }
@@ -233,35 +249,39 @@ function showFallbackOption(data) {
   const fallbackDiv = document.createElement("div");
   fallbackDiv.className = "fallback-option";
   fallbackDiv.innerHTML = `
-        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-top: 15px;">
-            <p style="margin: 0 0 10px 0; color: #856404;">
-                <i class="fas fa-exclamation-triangle"></i>
-                Não foi possível enviar o formulário. 
-                <a href="mailto:contato@odontoplus.com.br?subject=Contato Site&body=Nome: ${encodeURIComponent(
-                  data.nome
-                )}%0AEmail: ${encodeURIComponent(
+    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-top: 15px;">
+      <p style="margin: 0 0 10px 0; color: #856404;">
+        <i class="fas fa-exclamation-triangle"></i>
+        Não foi possível enviar o formulário. 
+        <a href="mailto:${
+          process.env.CLINICA_EMAIL || "contato@odontoplus.com.br"
+        }?subject=Contato Site&body=Nome: ${encodeURIComponent(
+    data.nome
+  )}%0AEmail: ${encodeURIComponent(
     data.email
   )}%0ATelefone: ${encodeURIComponent(
     data.telefone
   )}%0AAssunto: ${encodeURIComponent(
     data.assunto
   )}%0AMensagem: ${encodeURIComponent(data.mensagem)}" 
-                   style="color: #007bff; text-decoration: underline;">
-                   Clique aqui para enviar por email
-                </a>
-            </p>
-        </div>
-    `;
+          style="color: #007bff; text-decoration: underline;">
+          Clique aqui para enviar por email
+        </a>
+      </p>
+    </div>
+  `;
 
   const form = document.getElementById("formContato");
-  form.appendChild(fallbackDiv);
+  if (form) {
+    form.appendChild(fallbackDiv);
 
-  // Remover após 30 segundos
-  setTimeout(() => {
-    if (fallbackDiv.parentElement) {
-      fallbackDiv.remove();
-    }
-  }, 30000);
+    // Remover após 30 segundos
+    setTimeout(() => {
+      if (fallbackDiv.parentElement) {
+        fallbackDiv.remove();
+      }
+    }, 30000);
+  }
 }
 
 // Integração com WhatsApp
@@ -277,14 +297,6 @@ function initWhatsAppIntegration() {
         `https://wa.me/551134567890?text=${encodeURIComponent(mensagem)}`,
         "_blank"
       );
-
-      // Tracking
-      if (typeof gtag !== "undefined") {
-        gtag("event", "click", {
-          event_category: "whatsapp",
-          event_label: "botao_flutuante",
-        });
-      }
     });
   }
 
@@ -301,7 +313,7 @@ function initWhatsAppIntegration() {
   });
 }
 
-// Sistema de notificações (mantido do anterior)
+// Sistema de notificações
 function showSuccessMessage(message) {
   showNotification(message, "success");
 }
@@ -311,32 +323,37 @@ function showErrorMessage(message) {
 }
 
 function showNotification(message, type) {
+  // Remover notificações existentes
+  document.querySelectorAll(".notification").forEach((notification) => {
+    notification.remove();
+  });
+
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
   notification.innerHTML = `
-        <i class="fas fa-${
-          type === "success" ? "check-circle" : "exclamation-circle"
-        }"></i>
-        <span>${message}</span>
-        <button onclick="this.parentElement.remove()">&times;</button>
-    `;
+    <i class="fas fa-${
+      type === "success" ? "check-circle" : "exclamation-circle"
+    }"></i>
+    <span>${message}</span>
+    <button onclick="this.parentElement.remove()">&times;</button>
+  `;
 
   notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === "success" ? "#28a745" : "#dc3545"};
-        color: white;
-        padding: 15px 20px;
-        border-radius: 5px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-    `;
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: ${type === "success" ? "#28a745" : "#dc3545"};
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease;
+  `;
 
   document.body.appendChild(notification);
 
@@ -347,6 +364,32 @@ function showNotification(message, type) {
   }, 5000);
 }
 
+// Adicionar estilos CSS para animações
+const style = document.createElement("style");
+style.textContent = `
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .notification button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+  }
+`;
+document.head.appendChild(style);
+
 // Exportar funções para uso global
 window.FormHandler = {
   validateForm,
@@ -354,3 +397,5 @@ window.FormHandler = {
   showErrorMessage,
   handleFormSubmit,
 };
+
+console.log("✅ form.js carregado com sucesso");
