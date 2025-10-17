@@ -31,8 +31,11 @@ function initMobileMenu() {
   const navToggle = document.getElementById("navToggle");
   const navMenu = document.getElementById("navMenu");
 
+  // console.log("Inicializando menu mobile...", { navToggle, navMenu });
+
   if (navToggle && navMenu) {
-    navToggle.addEventListener("click", () => {
+    // Adicionar múltiplos event listeners para garantir que funcione
+    const toggleMenu = () => {
       navMenu.classList.toggle("active");
       // Alterar ícone do toggle
       const icon = navToggle.querySelector("i");
@@ -43,6 +46,13 @@ function initMobileMenu() {
         icon.classList.remove("fa-times");
         icon.classList.add("fa-bars");
       }
+    };
+
+    // Event listener principal
+    navToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
     });
 
     // Fechar menu ao clicar em um link
@@ -65,6 +75,8 @@ function initMobileMenu() {
         icon.classList.add("fa-bars");
       }
     });
+  } else {
+    // console.error("Elementos do menu não encontrados:", { navToggle, navMenu });
   }
 }
 
