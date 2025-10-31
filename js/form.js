@@ -125,7 +125,7 @@ async function handleNewsletterSubmit(form) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     showSuccessMessage("Inscrito com sucesso! Você receberá nossas novidades.");
     form.reset();
-  } catch (error) {
+  } catch (_error) {
     showErrorMessage("Erro ao realizar inscrição.");
   } finally {
     hideLoading(form);

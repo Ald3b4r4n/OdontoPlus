@@ -57,8 +57,17 @@ async function testEmailConnection() {
   }
 }
 
-// Executar teste ao iniciar
-testEmailConnection();
+// Executar teste ao iniciar (apenas em desenvolvimento e quando habilitado)
+if (
+  (process.env.NODE_ENV || "development") === "development" &&
+  process.env.ENABLE_EMAIL_TEST === "true"
+) {
+  testEmailConnection();
+} else {
+  console.log(
+    "⏭️ Teste automático de e-mail desativado (habilite com ENABLE_EMAIL_TEST=true em desenvolvimento)."
+  );
+}
 
 // Rota raiz - servir o index.html
 app.get("/", (req, res) => {
